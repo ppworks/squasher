@@ -24,12 +24,28 @@ describe Squasher::Config do
   end
 
   context '#stub_dbconfig' do
-    it 'add required db config file' do
-      config.stub_dbconfig do
-        File.open(File.join(fake_root, 'config', 'database.yml')) do |stream|
-          content = YAML.load(stream.read)
-          expect(content["development"]["database"]).to eq("squasher")
-          expect(content["development"]["encoding"]).to eq("utf-8")
+    context "when doesn't exist DB_CONFIG_KEY" do
+      before { ENV.delete('DB_CONFIG_KEY') }
+      it 'add required db config file' do
+        config.stub_dbconfig do
+          File.open(File.join(fake_root, 'config', 'database.yml')) do |stream|
+            content = YAML.load(stream.read)
+            expect(content["development"]["database"]).to eq("squasher")
+            expect(content["development"]["encoding"]).to eq("utf-8")
+          end
+        end
+      end
+    end
+
+    context "when exists DB_CONFIG_KEY" do
+      before { ENV['DB_CONFIG_KEY'] = 'another_development' }
+      it 'add required db config file' do
+        config.stub_dbconfig do
+          File.open(File.join(fake_root, 'config', 'database.yml')) do |stream|
+            content = YAML.load(stream.read)
+            expect(content["another_development"]["database"]).to eq("squasher")
+            expect(content["another_development"]["encoding"]).to eq("utf-8")
+          end
         end
       end
     end

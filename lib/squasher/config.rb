@@ -69,14 +69,14 @@ module Squasher
 
       begin
         content = ERB.new(File.read(dbconfig_file)).result(binding)
-        @dbconfig = YAML.load(content)['development']
+        @dbconfig = YAML.load(content)[dbconfig_key]
       rescue
         @dbconfig = nil
       end
 
       if @dbconfig && !@dbconfig.empty?
         @dbconfig['database'] = 'squasher'
-        @dbconfig = { 'development' => @dbconfig }
+        @dbconfig = { dbconfig_key => @dbconfig }
       else
         @dbconfig = nil
       end
@@ -84,6 +84,10 @@ module Squasher
 
     def update_dbconfig_file
       File.open(dbconfig_file, 'wb') { |stream| stream.write dbconfig.to_yaml }
+    end
+
+    def dbconfig_key
+      ENV.fetch('DB_CONFIG_KEY', 'development')
     end
   end
 end

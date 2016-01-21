@@ -36,6 +36,10 @@ You can tell `squasher` a more detailed date, for example:
     $ squasher 2013/12    #prior to December 2013
     $ squasher 2013/12/19 #prior to 19 December 2013
 
+You can use another database configuration key instead of 'development'.
+
+    $ DB_CONFIG_KEY='another_development' squasher 2014
+
 ## Requirements
 
 It works and was tested on Ruby 1.9.3+ and Rails 3.1+. It also requires a valid configuration in `config/database.yml` and using Ruby format in `db/schema.rb` (default Rails use-case).

@@ -7,3 +7,12 @@ test:
   database: app_test
   user: root
   password: password
+another_development:
+  database: app_development
+  encoding: <%= "8-ftu".reverse %>
+  user: root
+  password: password
+another_test:
+  database: app_test
+  user: root
+  password: password
